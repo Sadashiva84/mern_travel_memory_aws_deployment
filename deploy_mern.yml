@@ -1,0 +1,24 @@
+---
+- name: Deploy MERN stack application on web server
+  hosts: web_servers
+  become: yes
+  tasks:
+    - name: Install Node.js and NPM
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nodejs
+        - npm
+
+    - name: Clone the MERN application repository
+      ansible.builtin.git:
+        repo: https://github.com/UnpredictablePrashant/TravelMemory.git
+        dest: /home/ubuntu/TravelMemory
+        clone: yes
+        update: yes
+
+    - name: Install application dependencies
+      ansible.builtin.shell:
+        cmd: npm install
+        chdir: /home/ubuntu/TravelMemory
